@@ -38,7 +38,7 @@
               "filter": {
                 "and": [{
                   "term": {
-                    "payload.application.raw": "flow-deploy-service"
+                    "payload.application.raw": "flow-runner"
                   }
                 }, {
                   "term": {
