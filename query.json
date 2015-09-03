@@ -1,63 +1,219 @@
 {
-  "aggs": {
-    "flowStart": {
-      "filter": {
-        "and": [{
-          "term": {
-            "payload.workflow.raw": "flow-start"
-          }
-        }]
-      },
-      "aggs": {
-        "group_by_deploymentUuid": {
-          "terms": {
-            "field": "payload.deploymentUuid.raw",
-            "size": 0
-          },
-          "aggs": {
-            "beginRecord": {
-              "filter": {
-                "and": [{
+   "aggs": {
+      "flowStart": {
+         "filter": {
+            "and": [
+               {
                   "term": {
-                    "payload.application.raw": "app-octoblu"
+                     "payload.workflow.raw": "flow-start"
                   }
-                }, {
-                  "term": {
-                    "payload.state.raw": "begin"
+               }
+            ]
+         },
+         "aggs": {
+            "group_by_deploymentUuid": {
+               "terms": {
+                  "field": "payload.deploymentUuid.raw",
+                  "size": 0
+               },
+               "aggs": {
+                  "beginRecord": {
+                     "filter": {
+                        "and": [
+                           {
+                              "term": {
+                                 "payload.application.raw": "app-octoblu"
+                              }
+                           },
+                           {
+                              "term": {
+                                 "payload.state.raw": "begin"
+                              }
+                           }
+                        ]
+                     },
+                     "aggs": {
+                        "beginTime": {
+                           "min": {
+                              "field": "_timestamp"
+                           }
+                        }
+                     }
+                  },
+                  "endRecord": {
+                     "filter": {
+                        "and": [
+                           {
+                              "term": {
+                                 "payload.application.raw": "flow-runner"
+                              }
+                           },
+                           {
+                              "term": {
+                                 "payload.state.raw": "end"
+                              }
+                           }
+                        ]
+                     },
+                     "aggs": {
+                        "endTime": {
+                           "min": {
+                              "field": "_timestamp"
+                           }
+                        }
+                     }
+                  },
+                  "app-octoblu": {
+                     "filter": {
+                        "term": {
+                           "payload.application.raw": "app-octoblu"
+                        }
+                     },
+                     "aggs": {
+                        "beginRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "begin"
+                              }
+                           },
+                           "aggs": {
+                              "beginTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        },
+                        "endRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "end"
+                              }
+                           },
+                           "aggs": {
+                              "endTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  },
+                  "api-octoblu": {
+                     "filter": {
+                        "term": {
+                           "payload.application.raw": "api-octoblu"
+                        }
+                     },
+                     "aggs": {
+                        "beginRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "begin"
+                              }
+                           },
+                           "aggs": {
+                              "beginTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        },
+                        "endRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "end"
+                              }
+                           },
+                           "aggs": {
+                              "endTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  },
+                  "flow-deploy-service": {
+                     "filter": {
+                        "term": {
+                           "payload.application.raw": "flow-deploy-service"
+                        }
+                     },
+                     "aggs": {
+                        "beginRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "begin"
+                              }
+                           },
+                           "aggs": {
+                              "beginTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        },
+                        "endRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "end"
+                              }
+                           },
+                           "aggs": {
+                              "endTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  },
+                  "flow-runner": {
+                     "filter": {
+                        "term": {
+                           "payload.application.raw": "flow-runner"
+                        }
+                     },
+                     "aggs": {
+                        "beginRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "begin"
+                              }
+                           },
+                           "aggs": {
+                              "beginTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        },
+                        "endRecord": {
+                           "filter": {
+                              "term": {
+                                 "payload.state.raw": "end"
+                              }
+                           },
+                           "aggs": {
+                              "endTime": {
+                                 "min": {
+                                    "field": "_timestamp"
+                                 }
+                              }
+                           }
+                        }
+                     }
                   }
-                }]
-              },
-              "aggs": {
-                "beginTime": {
-                  "min": {
-                    "field": "_timestamp"
-                  }
-                }
-              }
-            },
-            "endRecord": {
-              "filter": {
-                "and": [{
-                  "term": {
-                    "payload.application.raw": "flow-runner"
-                  }
-                }, {
-                  "term": {
-                    "payload.state.raw": "end"
-                  }
-                }]
-              },
-              "aggs": {
-                "endTime": {
-                  "min": {
-                    "field": "_timestamp"
-                  }
-                }
-              }
+               }
             }
-          }
-        }
+         }
       }
-    }
-  }
+   }
 }

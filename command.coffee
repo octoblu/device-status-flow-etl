@@ -65,6 +65,18 @@ class Command
         beginTime: bucket.beginRecord.beginTime.value
         endTime:   bucket.endRecord.endTime.value
         workflow: 'flow-start'
+        'app-octoblu':
+          'beginTime': bucket['app-octoblu'].beginRecord.beginTime.value
+          'endTime':   bucket['app-octoblu'].endRecord.endTime.value
+        'api-octoblu':
+          'beginTime': bucket['api-octoblu'].beginRecord.beginTime.value
+          'endTime':   bucket['api-octoblu'].endRecord.endTime.value
+        'flow-deploy-service':
+          'beginTime': bucket['flow-deploy-service'].beginRecord.beginTime.value
+          'endTime':   bucket['flow-deploy-service'].endRecord.endTime.value
+        'flow-runner':
+          'beginTime': bucket['flow-runner'].beginRecord.beginTime.value
+          'endTime':   bucket['flow-runner'].endRecord.endTime.value
       }
 
   process: (deployments) =>
@@ -86,7 +98,24 @@ class Command
         endTime: formattedEndTime
         elapsedTime: elapsedTime
         success: endTime?
+        'app-octoblu':         @extractStep beginTime, deployment['app-octoblu']
+        'api-octoblu':         @extractStep beginTime, deployment['api-octoblu']
+        'flow-deploy-service': @extractStep beginTime, deployment['flow-deploy-service']
+        'flow-runner':         @extractStep beginTime, deployment['flow-runner']
       }
+
+  extractStep: (beginTime, step) =>
+    beginOffset = null
+    beginOffset = step.beginTime - beginTime if step.beginTime?
+
+    elapsedTime = null
+    elapsedTime = step.endTime - step.beginTime if step.endTime? && step.beginTime?
+    
+    {
+      beginOffset: beginOffset
+      elapsedTime: elapsedTime
+    }
+
 
 command = new Command()
 command.run()
