@@ -11,7 +11,8 @@
       "aggs": {
         "group_by_deploymentUuid": {
           "terms": {
-            "field": "payload.deploymentUuid.raw"
+            "field": "payload.deploymentUuid.raw",
+            "size": 0
           },
           "aggs": {
             "beginRecord": {
