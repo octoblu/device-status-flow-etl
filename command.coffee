@@ -8,7 +8,7 @@ QUERY = require './query.json'
 
 class Command
   constructor: ->
-    @sourceElasticsearchUrl      = process.env.SOURCE_ELASTICSEARCH_URL ? 'localhost     :9200'
+    @sourceElasticsearchUrl      = process.env.SOURCE_ELASTICSEARCH_URL ? 'localhost:9200'
     @destinationElasticsearchUrl = process.env.DESTINATION_ELASTICSEARCH_URL ? 'localhost:9200'
     @captureRangeInMinutes       = process.env.CAPTURE_RANGE_IN_MINUTES
 
