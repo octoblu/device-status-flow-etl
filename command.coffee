@@ -1,25 +1,55 @@
-_ = require 'lodash'
-url = require 'url'
-async = require 'async'
-moment = require 'moment'
-request = require 'request'
+_         = require 'lodash'
+async     = require 'async'
+colors    = require 'colors'
+commander = require 'commander'
+moment    = require 'moment'
+request   = require 'request'
+url       = require 'url'
 
 QUERY = require './query.json'
+packageJSON = require './package.json'
 
 class Command
-  constructor: ->
-    @sourceElasticsearchUrl      = process.env.SOURCE_ELASTICSEARCH_URL ? 'localhost:9200'
-    @destinationElasticsearchUrl = process.env.DESTINATION_ELASTICSEARCH_URL ? 'localhost:9200'
-    @captureRangeInMinutes       = process.env.CAPTURE_RANGE_IN_MINUTES
+  parseOptions: =>
+    commander
+      .version packageJSON.version
+      .option '-c, --capture-range <15>', 'capture range in minutes (env: FLOW_ETL_CAPTURE_RANGE_IN_MINUTES)'
+      .option '-d, --destination-url <url>', 'destination elasticsearch url (env: FLOW_ETL_DESTINATION_ELASTICSEARCH_URL)'
+      .option '-i, --interval <60>', 'interval in which to run, in seconds. (env: FLOW_ETL_INTERVAL)'
+      .option '--single-run', 'only run for one cycle (env: FLOW_ETL_SINGLE_RUN)'
+      .option '-s, --source-url <url>', 'source elasticsearch url (env: FLOW_ETL_SOURCE_ELASTICSEARCH_URL)'
+      .parse process.argv
+
+    @captureRangeInMinutes = parseInt(commander.captureRange ? process.env.FLOW_ETL_CAPTURE_RANGE_IN_MINUTES ? 15)
+    @destinationElasticsearchUrl = commander.destinationUrl ? process.env.FLOW_ETL_DESTINATION_ELASTICSEARCH_URL
+    @interval  = parseInt(commander.interval ? process.env.FLOW_ETL_INTERVAL || 60)
+    @singleRun = commander.singleRun || (process.env.FLOW_ETL_SINGLE_RUN == 'true')
+    @sourceElasticsearchUrl = commander.sourceUrl ? process.env.FLOW_ETL_SOURCE_ELASTICSEARCH_URL
+
+    unless @destinationElasticsearchUrl? && @sourceElasticsearchUrl?
+      commander.outputHelp()
+      console.error colors.red '  destination-url is required' unless @destinationElasticsearchUrl?
+      console.error colors.red '  source url-is required' unless @sourceElasticsearchUrl?
+      process.exit 1
 
   run: =>
+    @parseOptions()
+    return @doSingleRun @tentativePanic if @singleRun
+    @doForeverRun()
+
+  doForeverRun: =>
+    setInterval @doSingleRunOrDie, (1000 * 60 * @interval)
+
+  doSingleRun: (callback) =>
     @search @query(), (error, result) =>
-      throw error if error?
+      return callback error if error?
 
       deployments = @process @normalize result
-      async.each deployments, @update, (error) =>
-        throw error if error?
-        process.exit 0
+      async.each deployments, @update, callback
+
+  doSingleRunOrDie: =>
+    @doSingleRun (error) =>
+      @panic error if error?
 
   query: =>
     return QUERY unless @captureRangeInMinutes?
@@ -34,6 +64,14 @@ class Command
     })
 
     return query
+
+  panic: (error) =>
+    throw error
+    process.exit 1
+
+  tentativePanic: (error) =>
+    @panic error if error?
+    process.exit 0
 
   update: (deployment, callback) =>
     uri = url.format

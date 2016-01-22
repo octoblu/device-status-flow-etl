@@ -1,6 +1,6 @@
 {
   "name": "device-status-flow-etl",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "ETL for flow deploy metrics",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,8 @@
   "dependencies": {
     "async": "^1.4.2",
     "coffee-script": "^1.9.3",
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "request": "^2.61.0"
