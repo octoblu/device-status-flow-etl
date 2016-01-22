@@ -1,6 +1,6 @@
 {
   "name": "device-status-flow-etl",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "ETL for flow deploy metrics",
   "main": "index.js",
   "scripts": {

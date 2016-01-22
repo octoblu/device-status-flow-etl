@@ -14,17 +14,17 @@ class Command
     commander
       .version packageJSON.version
       .option '-c, --capture-range <15>', 'capture range in minutes (env: FLOW_ETL_CAPTURE_RANGE_IN_MINUTES)'
-      .option '-d, --destination-url <url>', 'destination elasticsearch url (env: FLOW_ETL_DESTINATION_ELASTICSEARCH_URL)'
+      .option '-d, --destination-url <url>', 'destination elasticsearch url (env: FLOW_ETL_DESTINATION_URL)'
       .option '-i, --interval <60>', 'interval in which to run, in minutes. (env: FLOW_ETL_INTERVAL)'
       .option '--single-run', 'only run for one cycle (env: FLOW_ETL_SINGLE_RUN)'
-      .option '-s, --source-url <url>', 'source elasticsearch url (env: FLOW_ETL_SOURCE_ELASTICSEARCH_URL)'
+      .option '-s, --source-url <url>', 'source elasticsearch url (env: FLOW_ETL_SOURCE_URL)'
       .parse process.argv
 
     @captureRangeInMinutes = parseInt(commander.captureRange ? process.env.FLOW_ETL_CAPTURE_RANGE_IN_MINUTES ? 15)
-    @destinationElasticsearchUrl = commander.destinationUrl ? process.env.FLOW_ETL_DESTINATION_ELASTICSEARCH_URL
+    @destinationElasticsearchUrl = commander.destinationUrl ? process.env.FLOW_ETL_DESTINATION_URL
     @interval  = parseInt(commander.interval ? process.env.FLOW_ETL_INTERVAL || 60)
     @singleRun = commander.singleRun || (process.env.FLOW_ETL_SINGLE_RUN == 'true')
-    @sourceElasticsearchUrl = commander.sourceUrl ? process.env.FLOW_ETL_SOURCE_ELASTICSEARCH_URL
+    @sourceElasticsearchUrl = commander.sourceUrl ? process.env.FLOW_ETL_SOURCE_URL
 
     unless @destinationElasticsearchUrl? && @sourceElasticsearchUrl?
       commander.outputHelp()
