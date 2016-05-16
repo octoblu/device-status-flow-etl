@@ -59,7 +59,7 @@ class Command
     query = _.cloneDeep QUERY
     query.aggs.flowStart.filter.and.push({
       range:
-        _timestamp:
+        'payload.date':
           gte: captureSince
     })
 

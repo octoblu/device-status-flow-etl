@@ -37,7 +37,7 @@
               "aggs": {
                 "beginTime": {
                   "min": {
-                    "field": "_timestamp"
+                    "field": "payload.date"
                   }
                 }
               }
@@ -60,7 +60,7 @@
               "aggs": {
                 "endTime": {
                   "min": {
-                    "field": "_timestamp"
+                    "field": "payload.date"
                   }
                 }
               }
@@ -81,7 +81,7 @@
                   "aggs": {
                     "beginTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -95,7 +95,7 @@
                   "aggs": {
                     "endTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -118,7 +118,7 @@
                   "aggs": {
                     "beginTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -132,7 +132,7 @@
                   "aggs": {
                     "endTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -155,7 +155,7 @@
                   "aggs": {
                     "beginTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -169,7 +169,7 @@
                   "aggs": {
                     "endTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -192,7 +192,7 @@
                   "aggs": {
                     "beginTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
@@ -206,7 +206,7 @@
                   "aggs": {
                     "endTime": {
                       "min": {
-                        "field": "_timestamp"
+                        "field": "payload.date"
                       }
                     }
                   }
