@@ -24,7 +24,7 @@
                 "and": [
                   {
                     "term": {
-                      "payload.application.raw": "app-octoblu"
+                      "payload.application.raw": "api-octoblu"
                     }
                   },
                   {
